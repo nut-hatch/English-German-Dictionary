@@ -1,0 +1,12 @@
+# default: on
+# description: The calculator server
+service translate
+{
+	flags		= REUSE
+	socket_type	= stream        
+	wait		= no
+	user		= nobody
+	server		= /usr/local/bin/translate
+	disable		= no
+}
+
