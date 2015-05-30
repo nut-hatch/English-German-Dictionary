@@ -1,16 +1,15 @@
-install: 
+install: translate_ui-de.mo
 	install translate translate_ui /usr/local/bin
 	which gdialog >/dev/null 2>&1 || install gdialog /usr/local/bin
 	grep -q "`cat translate.services`" /etc/services || cat translate.services >> /etc/services
 	install translate.xinetd /etc/xinetd.d/translate
-	#ln -sf /usr/local/bin/calc_ui /usr/local/bin/ncalc_ui
-	#install calc_ui-ru.mo /usr/share/locale/ru/LC_MESSAGES/calc_ui.mo
+	install translate_ui-de.mo /usr/share/locale/de/LC_MESSAGES/translate_ui.mo
 
-calc_ui.pot: calc_ui
-	xgettext -o calc_ui.pot -L Shell calc_ui
+translate_ui.pot: translate_ui
+	xgettext -o translate_ui.pot -L Shell translate_ui
 
-calc_ui-ru.mo: calc_ui-ru.po
-	msgfmt -o calc_ui-ru.mo calc_ui-ru.po
+translate_ui-de.mo: translate_ui-de.po
+	msgfmt -o translate_ui-de.mo translate_ui-de.po
 
 clone:
 	git clone https://github.com/itmo-infocom/calc_examples.git

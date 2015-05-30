@@ -6,7 +6,9 @@ ERROR=/tmp/translate-err-$$
 
 HOST=localhost
 PORT=1235
-MODE=local
+
+TRANSLATE=translate
+GETTEXT="gettext -d calc_ui"
 
 end () {
 	rm -f $FILE1 $FILE2 $ERROR
@@ -36,7 +38,7 @@ then
 		printUsage
 	elif [ $1 = '--network' ]
 	then
-		MODE=network
+		TRANSLATE="nc $HOST $PORT"
 		if [ $# -ge 2 ]
 		then 
 			HOST=$2
@@ -51,28 +53,21 @@ else
 	hintUsage
 fi
 
-which gdialog 2> /dev/null && DIALOG=dialog || DIALOG=dialog
+which gdialog 2> /dev/null && DIALOG=gdialog || DIALOG=dialog
 
 while true
 do
 	#`curl http://semes-olla.rhcloud.com/words?Swadesh/English.py`
-	$DIALOG --inputbox "Enter Number" 0 0 2> $FILE1 || end
-	INPUT=`cat $FILE1`
+	$DIALOG --inputbox "`$GETTEXT \"Enter Number:\"`" 0 0 2> $FILE1 || end
 
-	if [ $MODE = 'local' ]
-	then
-		curl -s "http://semes-olla.rhcloud.com/word?$INPUT&Swadesh/Germanic/German.py" > $FILE2
-	else
-		TRANSLATE="nc $HOST $PORT"
-		echo $INPUT | $TRANSLATE > $FILE2 2> $ERROR
-	fi
+	if cat $FILE1 | $TRANSLATE > $FILE2 2> $ERROR
 
-	if [ -s "$FILE2" ]
+	#if [ -s "$FILE2" ]
 	then
-		MSG="Translation: `cat $FILE2`. Continue?"
+		MSG="`$GETTEXT \"Translation:\"` `cat $FILE2`.\\n\\nContinue?"
 		$DIALOG --yesno "$MSG" 0 0 || end
 	else
-		MSG="Error. Continue?"
+		MSG="`$GETTEXT \"Error.\\n\\nContinue?\"`"
 		$DIALOG --yesno "$MSG" 0 0 || end
 	fi
 done
