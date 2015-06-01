@@ -1,5 +1,5 @@
 install: translate_ui-de.mo
-	install translate translate_ui /usr/local/bin
+	install translate translate_ui translate_simple /usr/local/bin
 	which gdialog >/dev/null 2>&1 || install gdialog /usr/local/bin
 	grep -q "`cat translate.services`" /etc/services || cat translate.services >> /etc/services
 	install translate.xinetd /etc/xinetd.d/translate

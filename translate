@@ -1,9 +1,7 @@
 #!/bin/sh
 
-#curl http://semes-olla.rhcloud.com/words?Swadesh/English.py
-#echo Enter number:
 read INPUT
-curl -s "http://semes-olla.rhcloud.com/word?$INPUT&Swadesh/Germanic/German.py"
+curl -s --fail --show-error "http://semes-olla.rhcloud.com/word?$INPUT&Swadesh/Germanic/German.py"
 exit $?
 
 

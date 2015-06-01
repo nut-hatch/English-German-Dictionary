@@ -1,0 +1,24 @@
+#!/bin/sh
+
+FILE1=/tmp/translate1-$$
+
+curl http://semes-olla.rhcloud.com/words?Swadesh/English.py
+echo Enter number:
+
+translate > $FILE1
+
+if [ -s "$FILE1" ]
+then
+	cat $FILE1
+	EXIT_STATUS=0
+else
+	echo Error.
+	EXIT_STATUS=1
+fi
+
+rm -f $FILE1
+
+echo
+
+exit $EXIT_STATUS
+

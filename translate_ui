@@ -1,36 +1,39 @@
 #!/bin/sh
 
+# TMP Files
 FILE1=/tmp/translate1-$$
 FILE2=/tmp/translate2-$$
-ERROR=/tmp/translate-err-$$
 
+# Network Info
 HOST=localhost
 PORT=1235
 
-TRANSLATE=translate
-GETTEXT="gettext -d calc_ui"
+# Gettext cmd
+GETTEXT="gettext -d translate_ui"
 
+# Stops application
 end () {
 	rm -f $FILE1 $FILE2 $ERROR
 	exit
 }
 
+# Prints hint how to call usage
 hintUsage () {
 	echo See usage with --help.
 	exit -1
 }
 
+# Prints usage
 printUsage () {
 	echo "Usage: $0 [ --network [host [port]] | --help ]" 
 	exit -1
 }
 
 
-
 # Handle parameters
 if [ $# -eq 0 ]
 then
-	MODE=local
+	TRANSLATE=translate
 elif [ $# -ge 1 ]
 then
 	if [ $1 = '--help' ]
@@ -38,7 +41,6 @@ then
 		printUsage
 	elif [ $1 = '--network' ]
 	then
-		TRANSLATE="nc $HOST $PORT"
 		if [ $# -ge 2 ]
 		then 
 			HOST=$2
@@ -46,6 +48,7 @@ then
 		then
 			PORT=$3
 		fi
+		TRANSLATE="nc $HOST $PORT"
 	else
 		hintUsage
 	fi
@@ -53,21 +56,23 @@ else
 	hintUsage
 fi
 
+# Setup UI
 which gdialog 2> /dev/null && DIALOG=gdialog || DIALOG=dialog
 
+# Run UI
 while true
 do
 	#`curl http://semes-olla.rhcloud.com/words?Swadesh/English.py`
 	$DIALOG --inputbox "`$GETTEXT \"Enter Number:\"`" 0 0 2> $FILE1 || end
 
-	if cat $FILE1 | $TRANSLATE > $FILE2 2> $ERROR
+	cat $FILE1 | $TRANSLATE > $FILE2
 
-	#if [ -s "$FILE2" ]
+	if [ -s "$FILE2" ]
 	then
-		MSG="`$GETTEXT \"Translation:\"` `cat $FILE2`.\\n\\nContinue?"
+		MSG="`$GETTEXT \"Translation:\"` `cat $FILE2`.\\n\\n`$GETTEXT \"Continue?\"`"
 		$DIALOG --yesno "$MSG" 0 0 || end
 	else
-		MSG="`$GETTEXT \"Error.\\n\\nContinue?\"`"
+		MSG="`$GETTEXT \"Error.\"`\\n\\n`$GETTEXT \"Continue?\"`"
 		$DIALOG --yesno "$MSG" 0 0 || end
 	fi
 done

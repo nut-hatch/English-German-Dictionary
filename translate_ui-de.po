@@ -1,0 +1,8 @@
+msgid "Enter Number:"
+msgstr "Zahl eingeben:"
+msgid "Translation:"
+msgstr "Uebersetzung:"
+msgid "Error."
+msgstr "Fehler."
+msgid "Continue?"
+msgstr "Weiter?"
