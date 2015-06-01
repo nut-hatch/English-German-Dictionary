@@ -2,7 +2,7 @@
 
 FILE1=/tmp/translate1-$$
 
-curl http://semes-olla.rhcloud.com/words?Swadesh/English.py
+curl -s --fail http://semes-olla.rhcloud.com/words?Swadesh/English.py
 echo Enter number:
 
 translate > $FILE1

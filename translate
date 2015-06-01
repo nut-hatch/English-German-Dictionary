@@ -4,4 +4,3 @@ read INPUT
 curl -s --fail --show-error "http://semes-olla.rhcloud.com/word?$INPUT&Swadesh/Germanic/German.py"
 exit $?
 
-

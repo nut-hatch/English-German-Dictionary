@@ -62,9 +62,9 @@ which gdialog 2> /dev/null && DIALOG=gdialog || DIALOG=dialog
 # Run UI
 while true
 do
-	#`curl http://semes-olla.rhcloud.com/words?Swadesh/English.py`
-	$DIALOG --inputbox "`$GETTEXT \"Enter Number:\"`" 0 0 2> $FILE1 || end
-
+		
+	$DIALOG --inputbox "`curl -s --fail --show-error http://semes-olla.rhcloud.com/words?Swadesh/English.py | sed -n '/^$/!{s/<[^>]*>//g;p;}' | paste - - - - - | column -t -s $'\t'`\\n\\n`$GETTEXT \"Enter Number:\"`" 0 0 2> $FILE1 || end
+#	$DIALOG --inputbox "`curl -s --fail --show-error http://semes-olla.rhcloud.com/words?Swadesh/English.py | sed -n '/^$/!{s/<[^>]*>//g;p;}'`
 	cat $FILE1 | $TRANSLATE > $FILE2
 
 	if [ -s "$FILE2" ]
